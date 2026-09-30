@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Səbətim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --accent-color: #0284c7;
+            --accent-hover: #0369a1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 40px 20px; }
+
+        .container { max-width: 850px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 { font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .header h1 i { color: var(--accent-color); }
+
+        .btn-back {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-back:hover { background-color: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
+
+        .table-responsive {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td { border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        tr:last-child td { border-bottom: none; }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+        .empty-cart i { font-size: 3rem; color: var(--accent-color); margin-bottom: 15px; }
+        .empty-cart h2 { font-size: 1.4rem; color: var(--text-main); font-weight: 600; }
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .total-amount { color: var(--accent-color); font-size: 1.4rem; font-weight: 700; }
+
+        /* Miqdar düymələri */
+        .qty-box { display: inline-flex; align-items: center; gap: 10px; }
+        .qty-box form { margin: 0; }
+        .qty-box span { min-width: 24px; text-align: center; font-weight: 600; }
+
+        .btn-qty {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .btn-qty:hover { background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px 8px;
+        }
+        .btn-delete:hover { color: #dc2626; }
+
+        /* Sifariş ver düyməsi */
+        .btn-order {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        .btn-order:hover { background-color: var(--accent-hover); }
+
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fa-solid fa-cart-shopping"></i> Səbətim</h1>
+        <a th:href="@{/menu}" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Menyuya qayıt
+        </a>
+    </div>
+
+    <!-- Səbət boşdursa -->
+    <div th:if="${#lists.isEmpty(cartItems)}" class="empty-cart">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <h2>Səbətiniz boşdur</h2>
+        <p style="margin-top: 8px;">Menyudan istədiyiniz məhsulları əlavə edə bilərsiniz.</p>
+    </div>
+
+    <!-- Səbət doludursa -->
+    <div th:if="${!#lists.isEmpty(cartItems)}">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>Məhsul</th>
+                    <th class="text-center">Say</th>
+                    <th>Qiymət</th>
+                    <th>Cəmi</th>
+                    <th class="text-center">Sil</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td th:text="${item.product.name}" style="font-weight: 600;">Məhsul Adı</td>
+
+                    <td class="text-center">
+                        <div class="qty-box">
+                            <form th:action="@{/cart/decrease}" method="post">
+                                <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                <button type="submit" class="btn-qty" title="Azalt"><i class="fa-solid fa-minus"></i></button>
+                            </form>
+                            <span th:text="${item.quantity}">1</span>
+                            <form th:action="@{/cart/increase}" method="post">
+                                <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                <button type="submit" class="btn-qty" title="Artır"><i class="fa-solid fa-plus"></i></button>
+                            </form>
+                        </div>
+                    </td>
+
+                    <td th:text="${item.product.price} + ' ₼'">0 ₼</td>
+                    <td th:text="${item.totalPrice} + ' ₼'" style="font-weight: 600; color: var(--accent-color);">0 ₼</td>
+
+                    <td class="text-center">
+                        <form th:action="@{/cart/remove}" method="post" style="margin: 0;">
+                            <input type="hidden" name="productId" th:value="${item.product.id}" />
+                            <button type="submit" class="btn-delete" title="Səbətdən sil"
+                                    onclick="return confirm('Məhsulu səbətdən silmək istədiyinizə əminsiniz?')">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total-box">
+            <span>Ümumi Məbləğ:</span>
+            <span class="total-amount" th:text="${totalAmount} + ' ₼'">0 ₼</span>
+        </div>
+
+        <!-- Sifariş ver -->
+        <form th:action="@{/order/place}" method="post">
+            <button type="submit" class="btn-order">
+                <i class="fa-solid fa-check"></i> Sifariş ver
+            </button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

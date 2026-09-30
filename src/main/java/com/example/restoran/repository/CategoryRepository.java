@@ -1,0 +1,11 @@
+package com.example.restoran.repository;
+
+import com.example.restoran.model.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {
+
+    // Kateqoriyaları ID sırasına görə (birinci yaradılan birinci gəlir) gətirir
+    List<Category> findAllByOrderByIdAsc();
+}

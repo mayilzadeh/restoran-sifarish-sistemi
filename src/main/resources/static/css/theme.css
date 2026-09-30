@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ===== Ortaq rəng paleti (menyu ilə eyni) ===== */
+:root {
+    --bs-body-font-family: 'Inter', sans-serif;
+    --bs-body-bg: #f8fafc;
+    --bs-body-color: #1e293b;
+    --bs-heading-color: #0f172a;
+    --bs-border-color: #e2e8f0;
+    --bs-secondary-color: #64748b;
+
+    --bs-primary: #0284c7;
+    --bs-primary-rgb: 2, 132, 199;
+    --bs-link-color: #0284c7;
+    --bs-link-hover-color: #0369a1;
+    --bs-link-color-rgb: 2, 132, 199;
+    --bs-link-hover-color-rgb: 3, 105, 161;
+
+    --bs-secondary: #64748b;
+    --bs-secondary-rgb: 100, 116, 139;
+    --bs-success: #16a34a;
+    --bs-success-rgb: 22, 163, 74;
+    --bs-danger: #ef4444;
+    --bs-danger-rgb: 239, 68, 68;
+    --bs-warning: #f59e0b;
+    --bs-warning-rgb: 245, 158, 11;
+    --bs-info: #0284c7;
+    --bs-info-rgb: 2, 132, 199;
+    --bs-dark: #0f172a;
+    --bs-dark-rgb: 15, 23, 42;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+h1, h2, h3, h4, h5 { color: #0f172a; font-weight: 700; }
+
+.navbar-brand { font-weight: 800; letter-spacing: -0.01em; }
+
+/* ===== Düymələr ===== */
+.btn { --bs-btn-border-radius: 10px; font-weight: 600; }
+
+.btn-primary {
+    --bs-btn-bg: #0284c7;
+    --bs-btn-border-color: #0284c7;
+    --bs-btn-hover-bg: #0369a1;
+    --bs-btn-hover-border-color: #0369a1;
+    --bs-btn-active-bg: #0369a1;
+    --bs-btn-active-border-color: #0369a1;
+    --bs-btn-disabled-bg: #0284c7;
+    --bs-btn-disabled-border-color: #0284c7;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #0284c7;
+    --bs-btn-border-color: #0284c7;
+    --bs-btn-hover-bg: #0284c7;
+    --bs-btn-hover-border-color: #0284c7;
+    --bs-btn-active-bg: #0284c7;
+    --bs-btn-active-border-color: #0284c7;
+    --bs-btn-disabled-color: #0284c7;
+    --bs-btn-disabled-border-color: #0284c7;
+}
+
+.btn-secondary {
+    --bs-btn-bg: #64748b;
+    --bs-btn-border-color: #64748b;
+    --bs-btn-hover-bg: #475569;
+    --bs-btn-hover-border-color: #475569;
+    --bs-btn-active-bg: #475569;
+    --bs-btn-active-border-color: #475569;
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: #64748b;
+    --bs-btn-border-color: #cbd5e1;
+    --bs-btn-hover-bg: #0f172a;
+    --bs-btn-hover-border-color: #0f172a;
+    --bs-btn-active-bg: #0f172a;
+    --bs-btn-active-border-color: #0f172a;
+}
+
+.btn-success {
+    --bs-btn-bg: #16a34a;
+    --bs-btn-border-color: #16a34a;
+    --bs-btn-hover-bg: #15803d;
+    --bs-btn-hover-border-color: #15803d;
+    --bs-btn-active-bg: #15803d;
+    --bs-btn-active-border-color: #15803d;
+}
+
+.btn-danger {
+    --bs-btn-bg: #ef4444;
+    --bs-btn-border-color: #ef4444;
+    --bs-btn-hover-bg: #dc2626;
+    --bs-btn-hover-border-color: #dc2626;
+    --bs-btn-active-bg: #dc2626;
+    --bs-btn-active-border-color: #dc2626;
+}
+
+.btn-warning {
+    --bs-btn-color: #0f172a;
+    --bs-btn-bg: #f59e0b;
+    --bs-btn-border-color: #f59e0b;
+    --bs-btn-hover-color: #0f172a;
+    --bs-btn-hover-bg: #d97706;
+    --bs-btn-hover-border-color: #d97706;
+    --bs-btn-active-color: #0f172a;
+    --bs-btn-active-bg: #d97706;
+    --bs-btn-active-border-color: #d97706;
+}
+
+.btn-light {
+    --bs-btn-color: #0f172a;
+    --bs-btn-bg: #ffffff;
+    --bs-btn-border-color: #e2e8f0;
+    --bs-btn-hover-bg: #e0f2fe;
+    --bs-btn-hover-border-color: #bae6fd;
+}
+
+/* ===== Formalar ===== */
+.form-control, .form-select {
+    border-radius: 10px;
+    border-color: #e2e8f0;
+    background-color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+}
+
+.form-label { font-weight: 600; color: #0f172a; }
+
+/* ===== Cədvəllər ===== */
+.table {
+    --bs-table-bg: #ffffff;
+    --bs-table-striped-bg: #f8fafc;
+    --bs-table-border-color: #e2e8f0;
+    --bs-table-hover-bg: #e0f2fe;
+}
+
+.table thead th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* ===== Kartlar və siyahılar ===== */
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.card-header { background-color: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+
+.list-group-item { border-color: #e2e8f0; }
+
+/* ===== Bildirişlər ===== */
+.alert { border-radius: 10px; font-weight: 500; }
+
+.alert-success { background-color: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.alert-danger  { background-color: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.alert-info    { background-color: #e0f2fe; color: #075985; border-color: #bae6fd; }
+
+.badge { font-weight: 600; }

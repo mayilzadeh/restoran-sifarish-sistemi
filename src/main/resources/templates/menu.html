@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Baku | Menyu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --primary-black: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-blue: #0284c7;
+            --success: #16a34a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 60px; }
+        html { scroll-padding-top: 80px; }
+
+        .top-navbar {
+            background: #ffffff;
+            padding: 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-black);
+            text-decoration: none;
+        }
+
+        .search-box { position: relative; width: 320px; }
+
+        .search-box input {
+            width: 100%;
+            padding: 9px 40px 9px 38px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: #f1f5f9;
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus { background-color: #ffffff; border-color: var(--primary-black); }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .search-clear:hover { background: #e2e8f0; color: var(--primary-black); }
+
+        .user-actions { display: flex; align-items: center; gap: 16px; }
+
+        .nav-btn {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Səbət sayğacı */
+        .cart-link { position: relative; padding-right: 4px; }
+
+        .cart-badge {
+            position: absolute;
+            top: -10px;
+            right: -14px;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+        }
+
+        .cart-badge.bump { animation: bump 0.5s ease; }
+
+        @keyframes bump {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.6); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-logout {
+            background: #f1f5f9;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Kateqoriya tab-ları */
+        .main-category-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 16px 28px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tab-card {
+            min-width: 130px;
+            height: 48px;
+            padding: 0 18px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f172a, #334155);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .tab-card:hover {
+            transform: scale(1.03);
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+        }
+
+        .tab-card span { color: #ffffff; font-weight: 700; font-size: 0.88rem; white-space: nowrap; }
+
+        /* Axtarış nəticəsi paneli */
+        .search-info {
+            max-width: 1100px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-info p { color: var(--text-muted); font-size: 0.95rem; }
+        .search-info p strong { color: var(--primary-black); }
+
+        .btn-reset {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-black);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover { background: var(--accent-blue); }
+
+        /* Məhsullar */
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+
+        .category-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-black);
+            margin: 32px 0 18px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid { grid-template-columns: 1fr; }
+            .search-box { width: 170px; }
+        }
+
+        .product-card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+            scroll-margin-top: 120px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        .product-image-box {
+            width: 100%;
+            height: 260px;
+            background-color: #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .product-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title { font-size: 1.25rem; font-weight: 700; color: var(--primary-black); margin-bottom: 6px; }
+        .product-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.4; margin-bottom: 18px; }
+        .product-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .product-price { font-size: 1.25rem; font-weight: 800; color: var(--accent-blue); }
+
+        .btn-add-cart {
+            background-color: var(--primary-black);
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-add-cart:hover { background-color: var(--accent-blue); }
+        .btn-add-cart.added { background-color: var(--success); }
+        .btn-add-cart:disabled { cursor: default; }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 60px 0;
+        }
+
+        /* Bildiriş mesajı */
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            background: var(--primary-black);
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 2000;
+            max-width: 340px;
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast i { color: #4ade80; font-size: 1.1rem; }
+        .toast.error i { color: #f87171; }
+
+        /* JavaScript işləməyəndə serverdən gələn mesaj (özü itir) */
+        .toast.server { animation: toastInOut 3s ease forwards; }
+
+        @keyframes toastInOut {
+            0%   { opacity: 0; transform: translateY(20px); }
+            10%  { opacity: 1; transform: translateY(0); }
+            80%  { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); visibility: hidden; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Yuxarı naviqasiya -->
+<header class="top-navbar">
+    <a th:href="@{/menu}" class="brand-logo">
+        <i class="fa-solid fa-utensils"></i> Central Baku
+    </a>
+
+    <!-- Axtarış (Enter basanda işləyir, yazdıqca təkliflər çıxır) -->
+    <form class="search-box" th:action="@{/menu}" method="get">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" name="q" th:value="${q}" placeholder="Məhsul axtar..." autocomplete="off" list="productSuggestions">
+        <datalist id="productSuggestions">
+            <option th:each="name : ${suggestions}" th:value="${name}"></option>
+        </datalist>
+        <a th:if="${q != null and !#strings.isEmpty(q)}"
+           th:href="@{/menu}" class="search-clear" title="Axtarışı təmizlə">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </form>
+
+    <div class="user-actions">
+        <a th:href="@{/cart}" class="nav-btn cart-link" sec:authorize="hasRole('USER')">
+            <i class="fa-solid fa-cart-shopping"></i> Səbət
+            <span class="cart-badge" id="cartBadge"
+                  th:style="${cartCount == null or cartCount == 0} ? 'display:none'"
+                  th:text="${cartCount}">0</span>
+        </a>
+        <a th:href="@{/order/my-orders}" class="nav-btn" sec:authorize="hasRole('USER')">
+            <i class="fa-solid fa-receipt"></i>
+        </a>
+        <a th:href="@{/admin/products}" class="nav-btn" sec:authorize="hasRole('ADMIN')">
+            <i class="fa-solid fa-gear"></i> Admin panel
+        </a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn-logout">Çıxış</button>
+        </form>
+    </div>
+</header>
+
+<!-- Kateqoriya tab-ları -->
+<div class="main-category-tabs" th:if="${!#lists.isEmpty(categories)}">
+    <a th:each="cat : ${categories}"
+       th:href="'#cat-' + ${cat.id}"
+       class="tab-card">
+        <span th:text="${cat.name}">Kateqoriya</span>
+    </a>
+</div>
+
+<!-- Axtarış nəticəsi paneli -->
+<div class="search-info" th:if="${q != null and !#strings.isEmpty(q)}">
+    <p>«<strong th:text="${q}">axtarış</strong>» üzrə nəticələr</p>
+    <a th:href="@{/menu}" class="btn-reset">
+        <i class="fa-solid fa-arrow-left"></i> Bütün menyuya qayıt
+    </a>
+</div>
+
+<!-- Məhsullar -->
+<div class="container">
+
+    <p class="no-results" th:if="${#lists.isEmpty(products)}">Heç bir məhsul tapılmadı.</p>
+
+    <div th:each="cat : ${categories}">
+        <h2 th:id="'cat-' + ${cat.id}" class="category-title" th:text="${cat.name}">Kateqoriya</h2>
+
+        <div class="products-grid">
+            <div class="product-card"
+                 th:id="'product-' + ${product.id}"
+                 th:each="product : ${products}"
+                 th:if="${product.category != null and product.category.id == cat.id}">
+
+                <div class="product-image-box">
+                    <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                         th:src="${product.imageUrl}" alt="Məhsul">
+                    <div th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"
+                         style="display:flex; align-items:center; justify-content:center; height:100%; color:#94a3b8; font-size:3rem;">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                </div>
+
+                <div class="product-details">
+                    <div>
+                        <h3 class="product-title" th:text="${product.name}">Məhsul Adı</h3>
+                        <p class="product-desc" th:text="${product.description}">Təsvir</p>
+                    </div>
+
+                    <div class="product-bottom">
+                        <span class="product-price" th:text="${product.price} + ' ₼'">0.00 ₼</span>
+                        <form class="add-to-cart-form" th:action="@{/cart/add}" method="post" style="margin: 0;"
+                              sec:authorize="hasRole('USER')">
+                            <input type="hidden" name="productId" th:value="${product.id}" />
+                            <input type="hidden" name="q" th:if="${q != null}" th:value="${q}" />
+                            <button type="submit" class="btn-add-cart">
+                                <i class="fa-solid fa-plus"></i> <span class="btn-text">Əlavə et</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bildiriş mesajı (JavaScript üçün) -->
+<div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastText"></span>
+</div>
+
+<!-- Serverdən gələn mesaj (JavaScript işləməyəndə ehtiyat variant) -->
+<div class="toast server" th:if="${successMessage != null}">
+    <i class="fa-solid fa-circle-check"></i>
+    <span th:text="${successMessage}">Məhsul səbətə əlavə olundu!</span>
+</div>
+
+<script>
+    const cartBadge = document.getElementById('cartBadge');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    let toastTimer;
+
+    function showToast(message, isError) {
+        toastText.textContent = message;
+        toast.classList.toggle('error', !!isError);
+        toast.querySelector('i').className = isError
+            ? 'fa-solid fa-circle-exclamation'
+            : 'fa-solid fa-circle-check';
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+
+    function bumpBadge() {
+        const count = (parseInt(cartBadge.textContent, 10) || 0) + 1;
+        cartBadge.textContent = count;
+        cartBadge.style.display = 'flex';
+        cartBadge.classList.remove('bump');
+        void cartBadge.offsetWidth; // animasiyanı yenidən başladır
+        cartBadge.classList.add('bump');
+    }
+
+    document.querySelectorAll('.add-to-cart-form').forEach(function (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault(); // səhifənin yenilənməsinin qarşısını alır
+
+            const btn = form.querySelector('.btn-add-cart');
+            const btnText = form.querySelector('.btn-text');
+            const icon = btn.querySelector('i');
+            if (btn.disabled) return;
+
+            const productName = form.closest('.product-card')
+                .querySelector('.product-title').textContent.trim();
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new URLSearchParams(new FormData(form))
+                });
+
+                // Sessiya bitibsə login səhifəsinə yönləndirir
+                if (response.redirected && response.url.includes('/login')) {
+                    window.location.href = response.url;
+                    return;
+                }
+                if (!response.ok) throw new Error('Xəta');
+
+                bumpBadge();
+                showToast(productName + ' səbətə əlavə olundu', false);
+
+                btn.classList.add('added');
+                icon.className = 'fa-solid fa-check';
+                btnText.textContent = 'Əlavə olundu';
+                setTimeout(function () {
+                    btn.classList.remove('added');
+                    icon.className = 'fa-solid fa-plus';
+                    btnText.textContent = 'Əlavə et';
+                    btn.disabled = false;
+                }, 1200);
+
+            } catch (err) {
+                showToast('Xəta baş verdi, yenidən cəhd edin', true);
+                btn.disabled = false;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

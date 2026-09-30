@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="nav(active)" class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand">⚙️ Admin Panel</span>
+        <div>
+            <a th:href="@{/admin/products}" class="btn btn-sm me-2"
+               th:classappend="${active == 'products'} ? 'btn-light' : 'btn-outline-light'">Məhsullar</a>
+
+            <a th:href="@{/admin/categories}" class="btn btn-sm me-2"
+               th:classappend="${active == 'categories'} ? 'btn-light' : 'btn-outline-light'">Kateqoriyalar</a>
+
+            <a th:href="@{/admin/orders}" class="btn btn-sm me-2"
+               th:classappend="${active == 'orders'} ? 'btn-light' : 'btn-outline-light'">Sifarişlər</a>
+
+            <a th:href="@{/menu}" class="btn btn-outline-light btn-sm me-2">🍽️ Menyuya qayıt</a>
+
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="btn btn-outline-light btn-sm">Çıxış</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

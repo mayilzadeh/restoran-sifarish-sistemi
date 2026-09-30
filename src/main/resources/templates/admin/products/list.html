@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Məhsullar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+</head>
+<body>
+<div th:replace="~{fragments/admin-nav :: nav('products')}"></div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h1>Məhsullar</h1>
+        <a th:href="@{/admin/products/new}" class="btn btn-primary">+ Yeni məhsul</a>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Ad</th><th>Qiymət</th><th>Kateqoriya</th><th>Əməliyyat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.price} + ' ₼'"></td>
+            <td th:text="${p.category != null ? p.category.name : '-'}"></td>
+            <td>
+                <a th:href="@{/admin/products/{id}/edit(id=${p.id})}" class="btn btn-sm btn-warning">Redaktə</a>
+                <form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Silinsin?')">Sil</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
